@@ -18,8 +18,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "*",
-    credentials: true,
+    origin: [process.env.CLIENT_URL], // Allow only the frontend domain
+    credentials: true, // Allow credentials (cookies, auth headers)
+    methods: ["GET", "POST", "PUT", "DELETE"], // Explicitly allow methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Explicit headers
   })
 );
 app.use(cookieParser());
