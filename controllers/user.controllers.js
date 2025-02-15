@@ -42,3 +42,12 @@ export const login = async (req, res) => {
     res.status(500).json({ error: "Error logging in" });
   }
 };
+
+export const getUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    return res.status(200).json(user);
+  } catch (error) {
+    console.error("Error getting user:", error);
+  }
+};
