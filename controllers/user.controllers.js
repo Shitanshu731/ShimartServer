@@ -16,7 +16,11 @@ export const register = async (req, res) => {
   try {
     const { userName, email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ userName, email, password: hashedPassword });
+    const newUser = new User({
+      userName,
+      email,
+      password: hashedPassword,
+    });
     await newUser.save();
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
@@ -36,7 +40,12 @@ export const login = async (req, res) => {
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "1h" });
     res.json({
       token,
-      user: { id: user._id, userName: user.userName, email: user.email },
+      user: {
+        id: user._id,
+        userName: user.userName,
+        email: user.email,
+        role: "user",
+      },
     });
   } catch (error) {
     res.status(500).json({ error: "Error logging in" });
