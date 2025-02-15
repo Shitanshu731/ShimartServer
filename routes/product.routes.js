@@ -1,5 +1,8 @@
 import express from "express";
-import { createProduct } from "../controllers/product.controllers.js";
+import {
+  createProduct,
+  getAllProducts,
+} from "../controllers/product.controllers.js";
 import { adminMiddleware } from "../middleware/adminMiddleware.js";
 import multer from "multer";
 const router = express.Router();
@@ -13,4 +16,5 @@ router.post(
   upload.single("image"),
   createProduct
 );
+router.get("/", getAllProducts);
 export default router;
