@@ -75,3 +75,38 @@ export const deleteUser = async (req, res) => {
     return res.status(500).json({ error: "Error deleting user" });
   }
 };
+
+export const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const existingUser = await User.findById(id);
+    if (!existingUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    let updatedFields = { ...req.body }; // Copy request body
+
+    // Handle password update separately
+    if (req.body.password) {
+      const isSamePassword = await bcrypt.compare(
+        req.body.password,
+        existingUser.password
+      );
+      if (isSamePassword) {
+        return res
+          .status(400)
+          .json({ error: "Password is the same as before" });
+      }
+      updatedFields.password = await bcrypt.hash(req.body.password, 10);
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(id, updatedFields, {
+      new: true,
+    });
+
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Error updating user" });
+  }
+};
