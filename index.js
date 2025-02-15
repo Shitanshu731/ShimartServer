@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import helmet from "helmet";
 import userRoutes from "./routes/user.routes.js";
+import productRoutes from "./routes/product.routes.js";
 import "./lib/db.js";
 
 // Load environment variables
@@ -22,6 +23,7 @@ app.use(helmet());
 
 // Routes
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/products", productRoutes);
 
 // Sample Route
 app.get("/", (req, res) => {
