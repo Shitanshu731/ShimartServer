@@ -7,7 +7,7 @@ import {
   deleteUser,
   updateUser,
 } from "../controllers/user.controllers.js";
-import { adminMiddleware } from "../lib/middleware.js";
+import { adminMiddleware } from "../middleware/adminMiddleware.js";
 
 const router = express.Router();
 

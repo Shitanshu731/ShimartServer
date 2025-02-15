@@ -1,31 +1,28 @@
+import cloudinary from "../config/cloudinary.js";
 import Product from "../models/Product.js";
 
 export const createProduct = async (req, res) => {
   try {
-    const {
-      name,
-      price,
-      rating,
-      countInStock,
-      image,
-      category,
-      description,
-      user,
-    } = req.body;
+    const { name, price, rating, stock, category, description } = req.body;
 
-    if (!name || !price || !countInStock || !category || !image) {
+    // Check if required fields are present
+    if (!name || !price || !stock || !category || !req.file) {
       return res.status(400).json({ message: "Missing required fields" });
     }
+
+    // Upload Image to Cloudinary
+    const cloudinaryResponse = await cloudinary.uploader.upload(req.file.path, {
+      folder: "products",
+    });
 
     const product = new Product({
       name,
       price,
       rating: rating || 0,
-      countInStock,
-      image,
+      stock,
+      image: cloudinaryResponse.secure_url, // Save Cloudinary URL
       category,
       description,
-      user,
     });
 
     const savedProduct = await product.save();
