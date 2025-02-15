@@ -4,6 +4,14 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET || "secret";
 
+export const getallUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    return res.status(200).json(users);
+  } catch (error) {
+    console.error("Error getting users:", error);
+  }
+};
 export const register = async (req, res) => {
   try {
     const { userName, email, password } = req.body;
