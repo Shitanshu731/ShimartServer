@@ -2,6 +2,7 @@ import express from "express";
 import {
   createProduct,
   getAllProducts,
+  getProductById,
 } from "../controllers/product.controllers.js";
 import { adminMiddleware } from "../middleware/adminMiddleware.js";
 import multer from "multer";
@@ -17,4 +18,5 @@ router.post(
   createProduct
 );
 router.get("/", getAllProducts);
+router.get("/:id", getProductById);
 export default router;
