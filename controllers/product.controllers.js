@@ -53,3 +53,30 @@ export const getProductById = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+export const searchProducts = async (req, res) => {
+  try {
+    const query = req.query.q?.trim() || ""; // Trim spaces for better accuracy
+
+    if (!query) {
+      return res.status(400).json({ message: "Search query is required" });
+    }
+
+    // Case-insensitive search in name, category, and description
+    const products = await Product.find({
+      $or: [
+        { name: { $regex: query, $options: "i" } },
+        { category: { $regex: query, $options: "i" } },
+        { description: { $regex: query, $options: "i" } },
+      ],
+    });
+
+    if (!products.length) {
+      return res.status(404).json({ message: "No products found" });
+    }
+
+    res.status(200).json(products);
+  } catch (error) {
+    console.error("Search API Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
